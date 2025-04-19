@@ -1,0 +1,7 @@
+/* resources/css/app.css */
+@import "tailwindcss";
+
+/* Custom imports (if needed) */
+@import './components/background.css';
+@import './components/cards.css';
+@import './components/text.css';
