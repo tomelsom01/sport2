@@ -1,0 +1,45 @@
+.neon-pink {
+  color: #ff007f;
+  border: 1px solid #ff007f;
+  background-color: transparent;
+  padding: 3px 6px;
+  transition: color 0.3s ease, text-shadow 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark .neon-pink {
+  color: #ff4fa1;
+  border-color: #ff4fa1;
+}
+
+.neon-pink:hover {
+  color: #ff3399;
+  text-shadow: 0 0 3px #ff3399, 0 0 6px #ff3399;
+  box-shadow: 0 0 4px #ff3399, 0 0 8px #ff3399;
+  border-color: #ff3399;
+}
+
+.dark .neon-pink:hover {
+  color: #ff66b2;
+  text-shadow: 0 0 3px #ff66b2, 0 0 8px #ff66b2;
+  box-shadow: 0 0 4px #ff66b2, 0 0 10px #ff66b2;
+  border-color: #ff66b2;
+}
+
+.neon-pink-header {
+  color: #ff007f;
+  transition: color 0.3s ease, text-shadow 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark .neon-pink-header {
+  color: #ff4fa1;
+}
+
+.neon-pink-header:hover {
+  color: #ff3399;
+  text-shadow: 0 0 3px #ff3399, 0 0 6px #ff3399;
+}
+
+.dark .neon-pink-header:hover {
+  color: #ff66b2;
+  text-shadow: 0 0 3px #ff66b2, 0 0 8px #ff66b2;
+}
