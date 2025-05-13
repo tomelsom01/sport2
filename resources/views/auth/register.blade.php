@@ -25,4 +25,12 @@
     </div>
   </div>
   <!-- resources/views/auth/register.blade.php -->
+  @if ($errors->any())
+    <div>
+        @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+        @endforeach
+    </div>
+@endif
+
 </x-layout>

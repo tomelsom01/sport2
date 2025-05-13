@@ -28,7 +28,7 @@
                                 </svg>
                             </span>
 
-                            <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300" placeholder="Search">
+                            <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300 hover:bg-gray-900" placeholder="Search">
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,24 @@
                     <a class="neon-pink focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center" href="#">Blog</a>
                     <a class="neon-pink focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center" href="#">Compoents</a>
                     <a class="neon-pink focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center" href="#">Courses</a>
-                   <a href="{{ route('register') }}" class="neon-pink focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center"> Login </a>
+                    @auth
+                      <span class="text-white mr-4">
+                          Welcome, {{ Auth::user()->name }}!
+                      </span>
+                      <form method="POST" action="{{ route('logout') }}" class="inline">
+                          @csrf
+                          <button type="submit" class="neon-pink focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">
+                              Logout
+                          </button>
+                      </form>
+                    @else
+                      <a href="{{ route('register') }}" class="neon-pink focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">
+                          Sign Up
+                      </a>
+                      <a href="{{ route('login') }}" class="neon-pink focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">
+                          Login
+                      </a>
+                    @endauth
                 </div>
 
                 <!-- Search input on mobile screen -->

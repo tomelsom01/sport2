@@ -9,3 +9,7 @@ Route::get('/', function () {
 });
 
 Route::get('/', [HelloController::class, 'show']);
+
+Route::get('/dashboard', function () {
+  return view('dashboard');
+})->middleware(['auth']);
