@@ -17,7 +17,7 @@
     </div>
   </div>
   @if ($errors->any())
-    <div>
+    <div class="max-w-md w-full mx-auto flex items-center p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 mt-4">
         @foreach ($errors->all() as $error)
             <div>{{ $error }}</div>
         @endforeach
