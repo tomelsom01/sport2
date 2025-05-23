@@ -15,12 +15,18 @@ class SportController extends Controller
         $sports = Sport::all();
         return view('sports.index', compact('sports'));
     }
+    public function create()
+    {
+      return view('sports.create');
+    }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+      \Log::info('Store method hit');
 
           $validated = $request->validate([
               'name' => 'required|max:255',
@@ -43,15 +49,22 @@ class SportController extends Controller
               $validated['user_id'] = auth()->id();
           }
 
-          Sport::create($validated);
+
 
           // For web app:
           // return redirect()->route('sports.index')
           //    ->with('success', 'Sport created successfully.');
 
           // For API:
-           return response()->json(['message' => 'Sport created successfully.'], 201);
+          $sport = Sport::create($validated);
 
+              if ($sport) {
+        return redirect()->route('sports.index')
+            ->with('success', 'Sport created successfully.');
+    } else {
+        return redirect()->back()
+            ->with('error', 'Sport not created successfully. Please try again.');
+    }
 
     }
 
@@ -59,10 +72,10 @@ class SportController extends Controller
      * Display the specified resource.
      */
     public function show(Sport $sport)
-    {
-      $sport = Sport::find($id);
-      return view('sports.show', compact('sport'));
-    }
+{
+    return view('sports.show', compact('sport'));
+}
+
 
     /**
      * Update the specified resource in storage.

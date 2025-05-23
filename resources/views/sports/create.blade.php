@@ -1,4 +1,14 @@
 <x-layout>
+      @if ($errors->any())
+      <div class="mb-4 p-4 bg-red-100 text-red-700 rounded">
+          <ul>
+              @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+              @endforeach
+          </ul>
+      </div>
+  @endif
+
     <div class="container mx-auto mt-10 px-4">
         <h1 class="text-2xl font-bold mb-6">Create a New Sport</h1>
         <form action="{{ route('sports.store') }}" method="POST" enctype="multipart/form-data">
@@ -47,12 +57,22 @@
                 <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
+            <div class="mb-4">
+                <label for="date_available" class="block text-gray-700 font-semibold mb-2">Date Available</label>
+                <input type="date" name="date_available" id="date_available" value="{{ old('date_available') }}"
+                       class="border border-gray-300 rounded-lg w-full p-2">
+                @error('date_available')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
              <div class="mb-4">
-                <label for="type" class="block text-gray-700 font-semibold mb-2">Type</label>
-                <input type="text" name="description" id="description" value="{{ old('description') }}"
+                <label for="description" class="block text-gray-700 font-semibold mb-2">Description</label>
+                <input type="textarea" name="description" id="description" value="{{ old('description') }}"
                        class="border border-gray-300 rounded-lg w-full p-2">
                 @error('description')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
+            <button type="submit" class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Create Post</button>
+        </form>
 </x-layout>
