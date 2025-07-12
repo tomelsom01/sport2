@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Models\Sport;
 use Illuminate\Http\Request;
 
@@ -25,48 +26,63 @@ class SportController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-      \Log::info('Store method hit');
+{
+    \Log::info('Store method hit');
 
-          $validated = $request->validate([
-              'name' => 'required|max:255',
-              'image' => 'nullable|image', // If you handle file uploads
-              'location' => 'required|max:255',
-              'description' => 'required',
-              'price' => 'nullable|numeric',
-              'date_available' => 'nullable|date',
-              'type' => 'nullable|max:255',
-              'contact_info' => 'nullable|max:255',
-          ]);
+    $validated = $request->validate([
+        'name' => 'required|max:255',
+        'image' => 'nullable|image',
+        'location' => 'required|max:255',
+        'description' => 'required',
+        'price' => 'nullable|numeric',
+        'date_available' => 'nullable|date',
+        'type' => 'nullable|max:255',
+        'contact_info' => 'nullable|max:255',
+    ]);
 
-          // Handle image upload if present
-          if ($request->hasFile('image')) {
-              $validated['image'] = $request->file('image')->store('sports', 'public');
-          }
+    // Handle image upload to Cloudinary if present
+   if ($request->hasFile('image')) {
+    \Log::info('Image file present');
+    if ($request->file('image')->isValid()) {
+        \Log::info('Image file is valid');
+        $imageFile = $request->file('image');
+        \Log::info('Real path: ' . $imageFile->getRealPath());
+        $uploadedFileUrl = Cloudinary::upload($imageFile->getRealPath())->getSecurePath();
+        $validated['image'] = $uploadedFileUrl;
+        try {
+    $result = Cloudinary::upload($imageFile->getRealPath());
+    \Log::info('Cloudinary upload result:', ['result' => $result]);
+    $uploadedFileUrl = $result->getSecurePath();
+    $validated['image'] = $uploadedFileUrl;
+} catch (\Exception $e) {
+    \Log::error('Cloudinary upload failed: ' . $e->getMessage());
+}
 
-          // If you have user authentication
-          if (auth()->check()) {
-              $validated['user_id'] = auth()->id();
-          }
+    } else {
+        \Log::warning('Image file is not valid');
+    }
+  } else {
+    \Log::warning('No image file present');
+  }
 
 
 
-          // For web app:
-          // return redirect()->route('sports.index')
-          //    ->with('success', 'Sport created successfully.');
 
-          // For API:
-          $sport = Sport::create($validated);
+    // Attach user ID if authenticated
+    if (auth()->check()) {
+        $validated['user_id'] = auth()->id();
+    }
 
-              if ($sport) {
+    $sport = Sport::create($validated);
+
+    if ($sport) {
         return redirect()->route('sports.index')
             ->with('success', 'Sport created successfully.');
     } else {
         return redirect()->back()
             ->with('error', 'Sport not created successfully. Please try again.');
     }
-
-    }
+}
 
     /**
      * Display the specified resource.

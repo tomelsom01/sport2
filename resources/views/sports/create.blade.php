@@ -22,6 +22,7 @@
                 <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
+            <input type="file" name="image" class="border border-gray-300 rounded-lg w-full p-2">
 
             <div class="mb-4">
                 <label for="location" class="block text-gray-700 font-semibold mb-2">Location</label>
