@@ -47,23 +47,21 @@ class SportController extends Controller
         \Log::info('Image file is valid');
         $imageFile = $request->file('image');
         \Log::info('Real path: ' . $imageFile->getRealPath());
-        $uploadedFileUrl = Cloudinary::upload($imageFile->getRealPath())->getSecurePath();
-        $validated['image'] = $uploadedFileUrl;
-        try {
-    $result = Cloudinary::upload($imageFile->getRealPath());
-    \Log::info('Cloudinary upload result:', ['result' => $result]);
-    $uploadedFileUrl = $result->getSecurePath();
-    $validated['image'] = $uploadedFileUrl;
-} catch (\Exception $e) {
-    \Log::error('Cloudinary upload failed: ' . $e->getMessage());
-}
 
+        try {
+            $result = Cloudinary::upload($imageFile->getRealPath());
+            \Log::info('Cloudinary upload result:', ['result' => $result]);
+            $uploadedFileUrl = $result->getSecurePath();
+            $validated['image'] = $uploadedFileUrl;
+        } catch (\Exception $e) {
+            \Log::error('Cloudinary upload failed: ' . $e->getMessage());
+        }
     } else {
         \Log::warning('Image file is not valid');
     }
-  } else {
+} else {
     \Log::warning('No image file present');
-  }
+}
 
 
 
@@ -112,9 +110,10 @@ class SportController extends Controller
         $sport = Sport::findOrFail($id);
 
         // Handle image upload if present
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('sports', 'public');
-        }
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+        $uploaded = Cloudinary::upload($request->file('image')->getRealPath());
+        $validated['image'] = $uploaded->getSecurePath();
+    }
 
         $sport->update($validated);
 

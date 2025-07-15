@@ -4,7 +4,7 @@
             @foreach ($sports as $sport)
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col">
                     @if($sport->image)
-                        <img src="{{ asset('storage/' . $sport->image) }}"
+                        <img src="{{ $sport->image }}"
                              alt="{{ $sport->name }}"
                              class="h-48 w-full object-cover">
                     @else
