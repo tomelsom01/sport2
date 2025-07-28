@@ -23,7 +23,7 @@
                     <div class="p-4 bg-gray-50 flex justify-between">
                         <a href="{{ route('sports.edit', $sport->id) }}"
                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm font-semibold transition">
-                            Edit
+                            Update
                         </a>
                         <form action="{{ route('sports.destroy', $sport->id) }}" method="POST"
                               onsubmit="return confirm('Are you sure you want to delete this sport?');">

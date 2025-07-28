@@ -5,8 +5,8 @@
     <link rel="shortcut icon" href="pointbreaklogo.png" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Level X</title>
-    @vite('resources/css/app.css')
-    @vite('resources/js/app.js')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 <body>
   <header>
@@ -118,7 +118,13 @@
 
   </header>
   <main>
-    {{ $slot }}
+  <div id="galaxy-bg" style="position:absolute; top:0; left:0; width:100vw; height:100vh; z-index:0;">
+      <canvas id="galaxy-canvas"></canvas>
+    </div>
+    <div class="cardstyle">
+      {{ $slot }}
+    </div>
+
   </main>
 
 </body>

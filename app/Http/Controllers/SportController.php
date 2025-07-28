@@ -113,13 +113,20 @@ class SportController extends Controller
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
         $uploaded = Cloudinary::upload($request->file('image')->getRealPath());
         $validated['image'] = $uploaded->getSecurePath();
-    }
+     }
 
         $sport->update($validated);
 
         return redirect()->route('sports.index')
             ->with('success', 'Sport updated successfully.');
     }
+
+    public function edit($id)
+{
+    $sport = Sport::findOrFail($id);
+    return view('sports.edit', compact('sport')); // This shows the edit form
+}
+
 
     /**
      * Remove the specified resource from storage.

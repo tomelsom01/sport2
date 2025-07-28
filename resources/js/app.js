@@ -1,2 +1,3 @@
 import './bootstrap';
-import './components/preview'
+import './components/galaxy';
+// import './components/starfield';

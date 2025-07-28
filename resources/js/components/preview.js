@@ -1,4 +1,6 @@
-document.getElementById('imageInput').addEventListener('change', function (e) {
+console.log('preview component loaded');
+
+  document.getElementById('imageInput').addEventListener('change', function (e) {
     const preview = document.getElementById('preview');
     const [file] = e.target.files;
     if (file) {
