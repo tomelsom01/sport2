@@ -1,72 +1,75 @@
-// galaxy.js
-const canvas = document.getElementById('galaxy-canvas');
+const canvas = document.getElementById('starfield');
 const ctx = canvas.getContext('2d');
-let stars = [];
-let mouse = { x: null, y: null };
+let width = window.innerWidth, height = window.innerHeight;
+canvas.width = width;
+canvas.height = height;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+// Starfield settings
+const numStars = 400;
+const stars = [];
+let mouseX = width / 2, mouseY = height / 2;
 
-// Star particle class with position, velocity, size, and draw method...
-class Star {
-  constructor() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.size = Math.random() * 1.5 + 0.5;
-    this.velocityX = (Math.random() - 0.5) * 0.3;
-    this.velocityY = (Math.random() - 0.5) * 0.3;
-  }
-  draw() {
-    ctx.beginPath();
-    ctx.fillStyle = 'white';
-    ctx.shadowColor = 'white';
-    ctx.shadowBlur = 8;
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  update() {
-    // Move star slowly
-    this.x += this.velocityX;
-    this.y += this.velocityY;
-
-    // Simple boundary check
-    if (this.x < 0) this.x = canvas.width;
-    if (this.x > canvas.width) this.x = 0;
-    if (this.y < 0) this.y = canvas.height;
-    if (this.y > canvas.height) this.y = 0;
-
-    // Mouse interaction: stars push away from cursor
-    if (mouse.x && mouse.y) {
-      let dx = this.x - mouse.x;
-      let dy = this.y - mouse.y;
-      let dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 100) {
-        this.x += dx / dist;
-        this.y += dy / dist;
-      }
-    }
-  }
+function randomRange(a, b) {
+    return Math.random() * (b - a) + a;
 }
 
-// Initialize stars
-for (let i = 0; i < 150; i++) stars.push(new Star());
+// Each star has 3D coordinates
+class Star {
+    constructor() {
+        this.reset();
+    }
+    reset() {
+        this.x = randomRange(-width, width);
+        this.y = randomRange(-height, height);
+        this.z = randomRange(0.1, width);
+    }
+    update() {
+        // Make stars move toward viewer (the center of the canvas)
+        this.z -= 4; // Star speed toward viewer; increase for faster
+        // Slight movement based on mouse offset from center
+        this.x += (mouseX - width / 2) * 0.002;
+        this.y += (mouseY - height / 2) * 0.002;
+        if (this.z <= 0.1 || this.x < -width*2 || this.x > width*2 || this.y < -height*2 || this.y > height*2) {
+            this.reset();
+            this.z = width;
+        }
+    }
+    draw() {
+        // Simple perspective projection
+        const sx = width / 2 + this.x / this.z * width;
+        const sy = height / 2 + this.y / this.z * height;
+        const radius = Math.max(0, 2.4 - this.z * 0.0022); // Smaller for distant stars
+        ctx.beginPath();
+        ctx.arc(sx, sy, radius, 0, Math.PI*2);
+        ctx.fillStyle = "#fff";
+        ctx.globalAlpha = 1 - this.z / width; // Fade distant stars
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+}
+
+function createStars() {
+    while (stars.length < numStars) stars.push(new Star());
+}
+function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width; canvas.height = height;
+}
+window.addEventListener('resize', resize);
+canvas.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+createStars();
 
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  stars.forEach(star => {
-    star.update();
-    star.draw();
-  });
-  requestAnimationFrame(animate);
+    ctx.fillStyle = "#111";
+    ctx.fillRect(0, 0, width, height);
+    for (const star of stars) {
+        star.update();
+        star.draw();
+    }
+    requestAnimationFrame(animate);
 }
 animate();
-
-window.addEventListener('mousemove', (e) => {
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
-});
-
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
